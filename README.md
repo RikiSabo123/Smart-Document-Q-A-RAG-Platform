@@ -1,114 +1,129 @@
-﻿# Smart Document Q&A System
+# RAG-Based Smart Document Q&A Platform
 
-מערכת RAG להעלאת PDF ולתשובות על פי תוכן המסמך.
+An AI-powered Retrieval-Augmented Generation (RAG) system that allows users to upload PDF documents and ask questions based on their content.
 
-## מה זה
+---
 
-פרויקט זה מאפשר להעלות קובץ PDF, לאנדקס אותו ב-ChromaDB, ולשאול שאלות על הטקסט שבמסמך.
+## Overview
 
-## טכנולוגיות
+The application extracts text from uploaded PDF files, creates embeddings, stores them inside ChromaDB, retrieves relevant document chunks, and generates accurate answers using Google's Gemini model.
 
-- Backend: FastAPI ו-Python
-- Frontend: React ו-Vite
-- Vector DB: ChromaDB
-- Embeddings: SHA256 מקומי
-- LLM: Google Generative AI (Gemini)
-- PDF: PyPDF
+---
 
-## מבנה הפרויקט
+## Features
+
+- PDF upload
+- Automatic document indexing
+- Semantic search
+- ChromaDB vector database
+- Context-aware AI answers
+- React frontend
+- FastAPI backend
+- Docker support
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- React
+- Vite
+
+### Backend
+
+- Python
+- FastAPI
+- LangChain
+
+### Vector Database
+
+- ChromaDB
+
+### AI
+
+- Google Gemini API
+
+### PDF Processing
+
+- PyPDF
+
+---
+
+## Architecture
 
 ```
-PROJECT/
-  backend/
-    app/main.py        # שרת FastAPI + RAG pipeline
-    uploads/           # קבצי PDF שהועלו
-    chroma_db/         # מסד וקטורים
-    requirements.txt   # תלותיות Python
-  frontend/
-    src/App.jsx        # ממשק המשתמש
-    src/main.jsx       # כניסת React
-    package.json
-    vite.config.js     # proxy ל-backend
-  docker-compose.yml
-  .env                # מפתח GOOGLE_API_KEY
-  README.md
+PDF Upload
+      │
+      ▼
+Text Extraction
+      │
+      ▼
+Chunking
+      │
+      ▼
+Embeddings
+      │
+      ▼
+ChromaDB
+      │
+      ▼
+Retriever
+      │
+      ▼
+Gemini
+      │
+      ▼
+Answer
 ```
 
-## התחלה מהירה
+---
 
-### דרישות
+## Installation
 
-- Python 3.11+
-- Node.js 18+
-- מפתח Google API
-- Docker ו-Docker Compose (אופציונלי)
+### Backend
 
-### 1. הגדרת מפתח
-
-בחשבון הפרויקט צור או עדכן את הקובץ `.env` בתיקיית השורש:
-
-```env
-GOOGLE_API_KEY=your_google_gemini_api_key_here
-```
-
-### 2. הרצת ה-backend
-
-```powershell
+```bash
 cd backend
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8010
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
 ```
 
-### 3. הרצת ה-frontend
+### Frontend
 
-בטרמינל חדש:
-
-```powershell
+```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-ברירת המחדל של Vite היא **http://localhost:5173**.
+---
 
-### 4. שימוש
+## API Endpoints
 
-1. פתחו את ה-frontend בדפדפן
-2. העלו PDF
-3. חכו לאינדוקס
-4. כתבו שאלה וקבלו תשובה
+POST /upload
 
-## Docker
+Upload a PDF document.
 
-```powershell
-docker compose up --build
-```
+POST /chat
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
+Ask a question about uploaded documents.
 
-## נקודות חשובות
+---
 
-- ודאו ש-`GOOGLE_API_KEY` מוגדר ב-`.env`.
-- במידה וה-frontend לא מתחבר, בדקו ש-`vite.config.js` מפנה ל-`http://127.0.0.1:8010`.
-- אם הקווטה של Gemini נגמרה, המערכת תחזיר קטעי טקסט רלוונטיים מהמסמך.
+## Future Improvements
 
-## קצה ה-API
+- Multiple document collections
+- Authentication
+- Conversation history
+- Streaming responses
 
-### `POST /upload`
+---
 
-- מקבל קובץ PDF
-- מחזיר שם קובץ ומספר חבילות שנוצרו
+## License
 
-### `POST /chat`
-
-- מקבל שאלת טקסט
-- ניתן להעביר `filename` כדי להגביל לחיפוש במסמך ספציפי
-
-## בעיות נפוצות
-
-- **העלאת PDF לא עובדת**: ודאו שהקובץ הוא PDF תקין.
-- **אין תוצאה רלוונטית**: העלו שוב את המסמך או שאלו בשאלה שונה.
-- **Backend לא מתחבר**: ודאו שהשרת רץ ב-8010 ושהפרוקסי ב-frontend נכון.
-
+MIT
